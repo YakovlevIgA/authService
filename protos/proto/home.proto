@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "protos/gen/proto;fromproto";
+
+
+
+import "google/protobuf/timestamp.proto";
+
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc DropPass(DropPassRequest) returns (DropPassResponse);
+  rpc Validate(ValidateRequest) returns (ValidateResponse);
+  rpc NewJwt(NewJwtRequest) returns (NewJwtResponse);
+  rpc RevokeJwt(RevokeJwtRequest) returns (RevokeJwtResponse);
+  rpc Refresh(RefreshRequest) returns (RefreshResponse);
+}
+
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+  string role = 4;
+}
+
+message RegisterResponse {
+  string message = 1;
+}
+
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string role = 3;
+}
+
+
+message DropPassRequest {
+  string username = 1;
+  string newpassword = 2;
+}
+
+message DropPassResponse {
+  bool success = 1;
+}
+
+
+message ValidateRequest {
+  string access_token = 1;
+}
+
+message ValidateResponse {
+  int64 user_id = 1;
+  string role = 2;
+}
+
+
+message NewJwtRequest {
+  int64 user_id = 1;
+}
+
+message NewJwtResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+
+message RevokeJwtRequest {
+  int64 user_id = 1;
+}
+
+message RevokeJwtResponse {}
+
+
+message RefreshRequest {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message RefreshResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string role = 3;
+}
+
+
+message Err {
+  google.protobuf.Timestamp expiration_time = 1;
+}
